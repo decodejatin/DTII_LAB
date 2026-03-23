@@ -10,10 +10,26 @@ def operation(a, b, op):
             return a / b
         else:
             raise ZeroDivisionError("Division by zero")
+    elif op == '^':
+        result = 1
+        for _ in range(int(b)):
+            result *= a
+        return result
     else:
         raise ValueError("Invalid operator")
 
 def calculator(l):
+    i = 0
+    while i < len(l):
+        if l[i] == '^':
+            left = float(l[i-1])
+            right = float(l[i+1])
+            result = operation(left, right, l[i])
+            l[i-1:i+2] = [result]
+            i -= 1
+        else:
+            i += 1
+
     i = 0
     while i < len(l):
         if l[i] in ('*', '/'):
@@ -24,7 +40,7 @@ def calculator(l):
             i -= 1
         else:
             i += 1
-    
+
     result = float(l[0])
     i = 1
     while i < len(l):
@@ -32,9 +48,5 @@ def calculator(l):
         num = float(l[i+1])
         result = operation(result, num, op)
         i += 2
-    
-    return result
 
-a = input()
-l = a.split()
-print("Result:", calculator(l))
+    return result
